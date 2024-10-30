@@ -101,3 +101,13 @@ class TestLogin:
         login_page.click_login()  # Nhấn nút đăng nhập
         error_message = login_page.get_error_message()  # Lấy thông báo lỗi
         assert error_message == "User or Password is not valid", f"Lỗi không đúng: {error_message}"
+    def test_login_success_with_redirect_failure(self, setup):
+        """Kiểm thử đăng nhập thành công nhưng trang không load."""
+        login_page = LoginPage(setup)
+        login_page.open()
+        login_page.enter_username("mngr456")  # Tên người dùng hợp lệ
+        login_page.enter_password("password456")  # Mật khẩu hợp lệ
+        login_page.click_login()
+        
+        # Giả định là một điều kiện không thành công khi trang không load
+        assert not login_page.is_redirect_successful(), "Trang không load sau khi đăng nhập."
